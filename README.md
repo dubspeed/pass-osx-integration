@@ -77,7 +77,7 @@ Steps:
 2. The script prints out a installation directory: `/Library/Application Support/Mozilla/NativeMessagingHosts`
 3.
 ```
-cd "~/Library/Application Support/Mozilla/NativeMessagingHosts"
+cd ~/Library/Application\ Support/Mozilla/NativeMessagingHosts
 ```
 4. Change line 1 of the file to:
 `#!/usr/bin/env python3`
