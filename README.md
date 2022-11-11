@@ -5,16 +5,16 @@ How-To and script to integrate pass https://www.passwordstore.org/ into OS X
 
 Description of my installation steps to integrate the password manager [pass](https://www.passwordstore.org/), it's import extension [pass-import](https://github.com/roddhjav/pass-import) and its Firefox plugin [passff](https://github.com/passff/passff) together in OS X.
 
-## Pass
+### Pass
 
 `brew install pass`
 
 
-## Create a gpg identity and key, initialize the pass repro
+### Create a gpg identity and key, initialize the pass repro
 
 TODO
 
-## Python
+### Python
 
 I removed all python3 version I had installed via homebrew and installed pyenv
 
@@ -40,7 +40,9 @@ python --version
 > Python 3.11.0
 ```
 
-## Installing pass-import via pip
+### pass-import
+
+pass-import is an extension for pass that allows easy import and export of passwords to and from pass.
 
 `pip install pass-import --user`
 
@@ -67,13 +69,13 @@ pass import
 
 (if the error message is *Error: import is not in the password store.*, the installation has failed)
 
-## Installing and patching passff
+### passff
 
 [PassFF](https://github.com/passff/passff) is a FireFox-Addon for pass which can be installed via the [Mozilla Addon page](https://addons.mozilla.org/firefox/addon/passff). 
 
 However, to integrate with pass and gpg, it requires to setup two dependecies.
 
-### passff-host
+#### passff-host
 
 The [passff-host](https://github.com/passff/passff-host) needs to be installed to integrate pass and the addon. As the time of writing, there is a compatibilty issue with python3, when installed via pyenv. See this [Github Issue](https://github.com/passff/passff-host/issues/57)
 
@@ -89,7 +91,7 @@ cd ~/Library/Application\ Support/Mozilla/NativeMessagingHosts
 
 5. Save and restart FF
 
-### pinentry-mac
+#### pinentry-mac
 
 When pass is installed via brew, as described above, it comes with a terminal based pin-entry dialog that can not be used from outside of the terminal, so passff failes.
 
@@ -103,14 +105,37 @@ brew install pinentry-mac
 
 Edit or create a .gnupg/gpg-agent.conf as descibed in the caveat text:
 
-> You can now set this as your pinentry program like
->      ~/.gnupg/gpg-agent.conf
->          pinentry-program #{HOMEBREW_PREFIX}/bin/pinentry-mac
-          
+```
+You can now set this as your pinentry program like
+~/.gnupg/gpg-agent.conf
+          pinentry-program #{HOMEBREW_PREFIX}/bin/pinentry-mac
+```
+
+```
+default-cache-ttl 18000
+max-cache-ttl 86400
+ignore-cache-for-signing
+pinentry-program /opt/homebrew/bin/pinentry-mac
+```
+
+The cache settings here control how long the keys will be available before the passphrase is requested again.
+
+
 Restart gpg-agent on your system:
 
 ```
-killall gpg-agent && gpg-agent --daemon
+gpgconf --kill gpg-agent && gpgconf --launch gpg-agent
 ```
 
+The gpg-agent manpage also mentions that 
 
+```
+export GPG_TTY=$(tty)
+```
+
+should be added to the correct exports during shell startup (e.g. .zshrc)
+
+
+## Migration of existing password database to pass
+
+tbd
