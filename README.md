@@ -69,8 +69,13 @@ pass import
 
 ## Installing and patching passff
 
-PassFF has two components, the FireFox extension, which can just be installed via Firefox-AddOns.
-The [passff-host](https://github.com/passff/passff-host) needs to be installed as well to integrate pass and the extension.
+[PassFF](https://github.com/passff/passff) is a FireFox-Addon for pass which can be installed via the [Mozilla Addon page](https://addons.mozilla.org/firefox/addon/passff). 
+
+However, to integrate with pass and gpg, it requires to setup two dependecies.
+
+### passff-host
+
+The [passff-host](https://github.com/passff/passff-host) needs to be installed to integrate pass and the addon. As the time of writing, there is a compatibilty issue with python3, when installed via pyenv. See this [Github Issue](https://github.com/passff/passff-host/issues/57)
 
 Steps:
 1. Install via install_host_app.sh (see documentation)
@@ -84,6 +89,28 @@ cd ~/Library/Application\ Support/Mozilla/NativeMessagingHosts
 
 5. Save and restart FF
 
-This fixes a compatibilty issue with python3 shim and pyenv! See this [Github Issue](https://github.com/passff/passff-host/issues/57)
+### pinentry-mac
+
+When pass is installed via brew, as described above, it comes with a terminal based pin-entry dialog that can not be used from outside of the terminal, so passff failes.
+
+The error messages given from passff are misleading: "gpg: command not found", but the troubleshooting section on the passff README points in the right direction.
+
+To install a proper pinentry
+
+```
+brew install pinentry-mac
+```
+
+Edit or create a .gnupg/gpg-agent.conf as descibed in the caveat text:
+
+> You can now set this as your pinentry program like
+>      ~/.gnupg/gpg-agent.conf
+>          pinentry-program #{HOMEBREW_PREFIX}/bin/pinentry-mac
+          
+Restart gpg-agent on your system:
+
+```
+killall gpg-agent && gpg-agent --daemon
+```
 
 
