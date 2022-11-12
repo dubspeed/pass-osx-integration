@@ -135,6 +135,21 @@ export GPG_TTY=$(tty)
 
 should be added to the correct exports during shell startup (e.g. .zshrc)
 
+### browserpass (alternative to passff)
+
+[browserpass](https://github.com/browserpass/browserpass-native) can be installed as alternative browser extension to passff.
+The tools works similar to passff with a browser-Addon and a HostNativeExtension to communicate with pass, gpg and pinentry-mac.
+It does not require python and compiles a native host extension. It also works with multiple chrome or firefox based browsers out of the box.
+
+```
+brew tap Amar1729/homebrew-formulae
+brew install browserpass
+
+PREFIX='/opt/homebrew/opt/browserpass' make hosts-firefox-user -f '/opt/homebrew/opt/browserpass/lib/browserpass/Makefile'
+PREFIX='/opt/homebrew/opt/browserpass' make hosts-chrome-user -f '/opt/homebrew/opt/browserpass/lib/browserpass/Makefile'
+```
+
+
 
 ## Migration of existing password database to pass
 
