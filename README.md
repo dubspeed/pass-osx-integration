@@ -153,4 +153,36 @@ PREFIX='/opt/homebrew/opt/browserpass' make hosts-chrome-user -f '/opt/homebrew/
 
 ## Migration of existing password database to pass
 
-tbd
+### Export from 1password6 via CSV
+
+1password can export it's database to CSV file format in plain text, pass-import can import those data to pass.
+
+It would also be possible to use the 1password .1pif file format, which includes all database entries, however the default import does not provide a good detection and import statement. Maybe the 'old' file format from 1password6 is noch correctly detected and mapped? Should be easy to fix.
+
+CSV gives easy control of whoch fields are exported and how they are mapped on the command line for testing:
+
+```
+pass import -v csv test2.csv --cols 'login,comments,password,title,group,url'
+```
+
+This works when using the "default" .csv settings from 1password for Logins.
+
+This creates a directory "Login" for 1password "login" type and a entry in the format
+
+```
+<password>
+login: abc@def.de
+url: https://def.de
+```
+
+Upsides: 
+* Quick
+
+Downsides of this approach:
+* looses all form field names
+
+### Testing and tweaking for passff
+
+### Import for browserpass
+
+
